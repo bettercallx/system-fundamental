@@ -1,14 +1,16 @@
-https://man7.org/linux/man-pages/man7/epoll.7.html
+https://man7.org/linux/man-pages/man7/epoll.7.html  
+
 
 cache I/O: 
 
 I/O multiplexing:
 
 
-POSIX(portable OS interface) I/O multiplexing: `select & polling` all client fd
+POSIX(portable OS interface) I/O multiplexing: `select & polling` all client fd. 
 
 
-Linux I/O event notification: `epoll`, RB tree storage `fd`, add/delete with O(log n)
+
+Linux I/O event notification: `epoll`, RB tree storage `fd`, add/delete with O(log n). 
 - epoll instance 
 can be considered as a container for 2 lists:
 interest list - the set of fd has registered in monitoring
