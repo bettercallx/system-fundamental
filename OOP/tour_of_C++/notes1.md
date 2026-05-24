@@ -70,7 +70,7 @@ Server() = default;
     *p = 100; //[X], write para to a random address
    
    //initialization
-   int *p = new int (0);
+   int *p = new int (0); // new : allocate memory + return memory address 分配内存+返回地址
    *p = 100;
    delete p;
    p = nullptr;
@@ -111,6 +111,4 @@ argument passing and function value return are that of initialization
 Initialization : 构造函数分配内存
 
 Assignment : release资源, 分配新内存
-
-# Chapter2 - undefined type
 
