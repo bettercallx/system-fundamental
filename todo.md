@@ -9,6 +9,17 @@
 - []LLM papers
 - []d2l (if still have some spare time)
 
+5.25-5.31
+| sec | estimate | real|
+| :--- |:---:|:---:|
+|[]leetcode50| 10h(2h/day)| |
+|[]OOP:A Tour of C++| 20h(5h*4)| |
+|[]system design beginner&week1| 15h| |
+|[]hello agent| 8h | |
+|[]agentic course| 3h | |
+|[]agent paper| (1h/day) | |
+|[]docker & OS revise| 8h| |
+
 5.13-5.17
 | sec | estimate | real|
 | :--- |:---:|:---:|

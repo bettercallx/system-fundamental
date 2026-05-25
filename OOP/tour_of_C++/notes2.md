@@ -1,3 +1,19 @@
+# Chapter3 - Modularity
+.h中的模块化 include / import
+
+```
+module解决的include问题
+- #inlcude 纯文本复制粘贴,100个文件#include同一个文件,编译器复制编译这个文件100次, Compilation time高
+- #include的文件顺序影响编译结果, order dependency
+- define宏污染 #include A.h 有define void count() #include B.h中的count()就被污染了
+
+没有export的函数就算外面import也不可见
+export module Vector; // defining the module called vector
+
+```
+
+
+
 # Chapter2 - undefined type
 ## Struct
 ```
@@ -62,13 +78,15 @@ Point b = {3,4};
 Point c = a+b;//Point operator+
 bool res = (a==b);//false, bool operator==
 
+
+// **std Vector的模拟实现**
 class Vector {
     double* elem;
     int sz;
 public:
     // 重载 []，让 Vector 能像数组一样用下标访问
     double& operator[](int i) {
-        return elem[i];
+        return elem[i]; //等同于 *(elem+i), elem的内存地址开始移动i个,*是解引用(elem保留首地址,i是offset偏移量)
     }
 };
 
@@ -77,6 +95,3 @@ v[3] = 7.0;    // 实际上调用的是 v.operator[](3)
 
 union -> variant
 ```
-
-# Chapter3 - Modularity
-
