@@ -7,3 +7,5 @@
 | DAU daily active users| 日活用户| 用DAU估算系统并发RPS/每日数据存储量 |
 | peak traffic| 峰值流量 | 系统需要按照peak做capacity planning|
 | load balancer | 负载均衡器 | |
+| sharding| 分片 ||
+| route| 路由 ||
