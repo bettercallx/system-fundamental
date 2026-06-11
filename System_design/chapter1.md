@@ -56,7 +56,7 @@ GET /users/1
 
 分为 web server和 database server可以独立拓展,请求量增大可以加web server,数据量大可以单独升级database
 
-Web Server（Web Tier） — 处理所有client请求,返回 HTML/JSON;它负责接收请求 & 执行业务逻辑 & 返回响应
+Web Server(Web Tier) — 处理所有client请求,返回 HTML/JSON;它负责接收请求 & 执行业务逻辑 & 返回响应
 
 Database Server（Data Tier） — 只负责存储和查询数据,Web Server 需要数据的时候,向 Database Server 发查询请求
 
@@ -100,4 +100,45 @@ If server 1 goes offline, all the traffic will be routed to server 2. We will al
 
 ## database replication - data tier
 
-origin(master) and the copies(slaves)
+origin DB(master) and the copies DB(slaves)
+
+DB大小: 一对多可以分摊read压力,大小相同,slave挂了可以用另一个，master goes offline可以把某个slave promoted to be the new master
+
+data一致性: synchronous 同步, master write等到slave确认write完再返回succ,data强一致,但是慢
+
+**asynchronous 异步**, master write之后立刻返回succ,后台再同步data给slave,短暂旧data,快
+
+
+## Cache
+
+Cache stores the result of responses or frequently accessed data in memory. **Redis**
+
+read through cache: after receiving a request, a web server first checks if the cache has the available response.
+
+If it has, it sends data back to the client. If not, it queries the DB, stores the response in the cache.
+
+**consider using cache** 1.when data is read frequently and temporary saved 2.expiration policy
+
+3.Consistency, data store and cache in sync 4.mitigating failure, to avoid "a single point of failure",
+
+set multiple cache servers across different data centers
+
+## Content delivery network(CDN)内容分发网络
+
+存静态资源static content,(图片 JS/CSS/Image,视频,不怎么变的HTML页面)复制网站上不经常变动的东西,存在各个地方更近的servers里,解决:网络延迟latency,Server Overload
+
+ - 1.user 向系统要一张图片。2.请求先到达最近的 CDN 节点 3.CDN 找servers里没有这张图(Cache Miss,缓存未命中)
+
+  4.CDN 节点替user去拉主服务器(Origin Server)这张图 5.主服务器把图片给 CDN,CDN 自己存一份(Cache),再把图片吐给用户
+
+  6.第二个user再来要这张图时,CDN 找到了(Cache Hit,缓存命中),直接秒发给第二个用户，不需要再麻烦主服务器
+
+  consideration of using a CDN: 1.三方提供,cost问题 2.合适的cache expiry time
+
+
+关于CDN缓存一致性: 版本化URL versioning. user从main server中获得最新HTML,main server给user的HTML中有最新new123.png,CDN里没有,cache miss,CDN节点
+
+从main server中获取最新的new123.png.之前的旧缓存expiry time到期删掉即可
+
+
+
