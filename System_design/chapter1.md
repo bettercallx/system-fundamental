@@ -135,10 +135,27 @@ set multiple cache servers across different data centers
 
   consideration of using a CDN: 1.三方提供,cost问题 2.合适的cache expiry time
 
-
 关于CDN缓存一致性: 版本化URL versioning. user从main server中获得最新HTML,main server给user的HTML中有最新new123.png,CDN里没有,cache miss,CDN节点
 
 从main server中获取最新的new123.png.之前的旧缓存expiry time到期删掉即可
 
+## stateless web tier - web server层的拓展
 
+session: 存某个user一段持续的状态信息
 
+stateful: client的所有request都打到某个web server,否则session状态丢了. A->server1,B->server2,C->server3,后续只能访问各自server,
+web server有状态
+
+解决方案stateless: session数据从web server中取出来,存入一个共享的外部存储NoSQL(redis),每台web server都是stateless的,任何一台都能处理client的request.
+
+web server不保留用户状态,NoSQL可以解决并发读写冲突、文件锁、读写速度慢的问题
+
+## message queue
+
+data center的traffic分流/data同步/自动化测试部署
+
+在web server阶段message queue可以异步处理request
+
+logging在很多用户时很重要,记录server的状态;metrics可以记录CPU/DB tier/cache/business;测试部署的automation 
+
+DB的vertical horizonal拓展，分别是scale up和sharding,scale up是加CPU RAM坏处是可能导致单个节点fail就全fail;sharding更灵活,跟key相关,比如可以%4,但是会导致otspot数据过多,比如lady gaga相关,需要分到一个单独的db中
