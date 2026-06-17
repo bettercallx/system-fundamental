@@ -156,6 +156,6 @@ data center的traffic分流/data同步/自动化测试部署
 
 在web server阶段message queue可以异步处理request
 
-logging在很多用户时很重要,记录server的状态;metrics可以记录CPU/DB tier/cache/business;测试部署的automation 
+logging在很多用户时很重要,记录server的状态;metrics可以记录CPU/DB tier/cache/business;测试部署的automation
 
 DB的vertical horizonal拓展，分别是scale up和sharding,scale up是加CPU RAM坏处是可能导致单个节点fail就全fail;sharding更灵活,跟key相关,比如可以%4,但是会导致otspot数据过多,比如lady gaga相关,需要分到一个单独的db中
