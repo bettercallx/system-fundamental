@@ -106,9 +106,7 @@ Function profile(id: int):
 
 ERD(entity relationship diagram) 表示DB中有哪些表,每张表有哪些字段,表与表的关系
 
-entity是每张表
-
-relationship是表之间的关联
+entity是每张表,relationship是表之间的关联; `>`表示多对一,`<`表示一对多,`-`表示一对一
 
 `function requirement:`
 
@@ -117,5 +115,97 @@ relationship是表之间的关联
 - 看其他user的帖子
 
 用两张**模型表**存数据实体，一张**关联表**记录多对多关系
+**ERD 实体关系图**
 
-follows users posts
+```SQL
+三个表 Tables: follows users posts
+
+Table follows { int follows_user_id, int follower_user_id, timestamp created_time }
+Table users {int id[primary key], char username, char psword, timestamp created_time}
+Table posts {int id[primary key], char title, body text[note:'content...'], int user_id, timestamp created_time}
+
+relation靠的是外键foreign key, posts.user_id 一定来自并引用 users表, users表被引用, posts.user_id是foreign key
+follows_user_id 和 follower_user_id 都是users的外键
+foreign key是约束而不是赋值,带校验。如果users表没有id=111用户,posts表插入一条user_id = 111数据会报错
+
+Ref: posts.user_id > users.id
+Ref: users.id < follows_user_id
+Ref: users.id < follower_user_id
+
+```
+
+**SQL**创建三个表
+
+```SQL
+
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    username VARCHAR,
+    psword VARCHAR,
+    created_time TIMESTAMP
+);
+
+CREATE TABLE posts (
+    id INT PRIMARY KEY,
+    title VARCHAR,
+    body TEXT,
+    user_id INT,
+    created_time TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE follows (
+    follower_id INT,
+    following_id INT,
+    created_time TIMESTAMP,
+    FOREIGN KEY (follower_id) REFERENCES users (id),
+    FOREIGN KEY (following_id) REFERENCES users (id)
+);
+```
+
+展示关注人的最近10篇post
+
+```SQL
+SELECT p.id, p.title, p.body, p.user_id, p.created_at //选这几个字段开始查
+FROM posts p // 从posts开始查,简称p
+JOIN follows f ON p.user_id = f.followed_user_id // posts和follows两张表拼起来,post作者=被关注者
+WHERE f.following_user_id = <User ID> // 只看我关注的人
+ORDER BY p.create_at DESC // 按发布时间排序 倒排
+LIMIT 10 OFFSET 0 // 只取前10 条，最好做一个分页，刷新query的时候根据OFFSET的数字
+```
+
+提供RESTful API,面向资源. Representational State Transfer
+
+URL表示资源比如/posts/123,URL不携带者动作信息;根据用户操作选择对应的HTTP method, 按钮绑定method; URL和method组成一个完整的HTTP request发给server
+
+用户点了"查看帖子列表"，前端javascript里写的是：
+fetch('/posts', {
+    method: 'GET'
+})
+
+比如对"posts"这个资源, method 方法有:
+
+GET /posts — 获取所有帖子
+
+GET /posts/123 — 获取 id 为 123 的帖子
+
+POST /posts — 创建一条新帖子
+
+PUT /posts/123 — 更新 id 为 123 的帖子
+
+DELETE /posts/123 — 删除 id 为 123 的帖子
+
+template 模糊了服务器和客户端的边界,template必须在server渲染才能返回网页给客户端; RESTful 在server返回资源,客户端自己选择图层方案
+
+关于发帖的**authorization**字段, 用于传递用户的身份认证令牌token, 以确保只有经过身份验证的用户才能发帖, token通常在登录后获取, 后续请求携带
+
+```
+POST /api/posts
+
+header:
+content type: application/json
+authorization: Bearer<token>
+
+body:
+{"title": "xxx", "body": "xxxx"}
+```
