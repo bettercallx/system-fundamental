@@ -16,9 +16,76 @@ if (n & 1) //奇偶判断
 
 auto : auto b = true; //the type can be deduced from the initializer
 
-`scope and shared_ptr`
-local scope, class scope, namespace scope
+`scope, variable and shared_ptr`
+scope: local scope, class scope, namespace scope
 
+---
+variable: 全局变量、局部变量、成员变量、静态局部变量、堆上变量、常量
+
+**栈** - 局部变量
+
+**堆** - new出来,手动delete
+
+**静态区** - 全局变量、static变量(程序结束才释放)
+
+---
+
+全局变量: 静态区，写在class之外
+
+```cpp
+int g = 100;   // 静态区
+```
+
+局部变量: 递归时计算的局部变量在栈上，每次函数调用开一个新地址的leftH，每层各一份，指向分别的内存地址
+
+```cpp
+函数内声明,函数返回就销毁
+void foo() {
+    int x = 5;          // 局部变量，在栈上
+    vector<int> v;       // 也是局部变量
+}  // 函数结束，x 和 v 都没了
+
+class Solution {
+    int leftH;           // 成员变量，跟 Solution 对象绑定，分配地址0x100
+public:
+    void foo() {
+        int x = 5;      // 局部变量
+        leftH = 10;     // 访问的是对象的成员变量，地址0x100
+    }
+};
+```
+
+成员变量: class里public/private定义的变量，内存&生命周期跟随对象object
+
+```cpp
+// 情况1：对象在栈上 → 成员变量跟着在栈上
+void foo() {
+    Solution s;        // s 在栈上，s.leftH 也在栈上
+}
+
+// 情况2：对象在堆上 → 成员变量跟着在堆上
+void foo() {
+    Solution* s = new Solution();  // s 指向堆，s->leftH 在堆上
+}
+
+// 情况3：对象是全局的 → 成员变量跟着在静态区
+Solution s;            // 全局对象，s.leftH 在静态区
+```
+
+---
+
+静态局部变量: 函数里加static 只初始化一次 函数结束不销毁
+
+```cpp
+void foo(){
+    static int count = 0; //第一次调用 静态区 初始化，之后一直在，函数结束不销毁
+    count++;
+}
+```
+
+堆上变量: new手动分配，不会自动销毁，需要delete
+
+---
 shared_ptr & lifetime : ref counts  ==0 -> end of lifetime
 
 循环引用 两个类内部有持有对方的shared_ptr

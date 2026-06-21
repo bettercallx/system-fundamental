@@ -12,10 +12,10 @@ export module Vector; // defining the module called vector
 
 ```
 
-
-
 # Chapter2 - undefined type
+
 ## Struct
+
 ```
 // struct + 手动管理容易出错, struct is simply a class with members public by default
 //define a vector
@@ -31,6 +31,7 @@ vector_init(vector &v, int s){
 }
 
 ```
+
 ## Class
 
 ```
