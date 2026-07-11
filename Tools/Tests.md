@@ -4,7 +4,7 @@
 
 ## scripts
 
-数据处理 — pandas读CSV/JSON、清洗数据、做统计。Text-to-SQL项目的evaluation结果分析会用到。
+数据处理 — pandas读CSV/JSON、清洗数据 统计，Text-to-SQL项目evaluation结果分析会用到
 自动化测试 — Playwright&pytest、Selenium(浏览器自动化)
 API调用 — requests库调REST API、或者用SDK（比如Anthropic的Claude SDK）。批量调模型、收集结果
 脚本工具 — os、subprocess、shutil做文件操作，argparse做命令行参数。部署脚本、批量重命名、日志处理这类

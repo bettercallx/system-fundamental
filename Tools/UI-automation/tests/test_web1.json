@@ -1,0 +1,5 @@
+[
+  {"query": "github", "expected_title": "GitHub"},
+  {"query": "openai", "expected_title": "OpenAI"},
+  {"query": "asdfgjkl", "expected_title": "asdfgjkl"}
+]

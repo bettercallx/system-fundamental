@@ -38,3 +38,8 @@ Docker - docker
 docker pull/docker run
 ```
 
+.venv 隔离python解释器和pip，是python虚拟环境
+
+`source .../.venv/bin/activate` 激活虚拟环境后，终端的PATH变量会把 `.venv/bin` 排在最前面，系统运行pytest先找到.venv的而不是用本机的pytest
+
+

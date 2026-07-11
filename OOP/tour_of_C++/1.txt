@@ -1,0 +1,51 @@
+UUID="8a2890ab-95e3-431c-836d-9519dd01c826"
+PRIVKEY="OGikPn_0bNVCIM4uK3SvSa4nsoar2JOubbl5gIXTIUg"
+SHORTID="d9efbd1715e49eba"
+SNI="www.bing.com"
+
+sudo tee /usr/local/etc/xray/config.json > /dev/null << EOF
+{
+  "log": {
+    "loglevel": "warning",
+    "access": "none"
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "$UUID",
+            "flow": "xtls-rprx-vision"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "show": false,
+          "dest": "$SNI:443",
+          "xver": 0,
+          "serverNames": ["$SNI"],
+          "privateKey": "$PRIVKEY",
+          "shortIds": ["", "$SHORTID"]
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    }
+  ]
+}
+EOF
