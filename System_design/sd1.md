@@ -209,3 +209,16 @@ authorization: Bearer<token>
 body:
 {"title": "xxx", "body": "xxxx"}
 ```
+
+### stateless
+水平scaling将所有web 服务无状态化， 对象缓存，数据库，消息队列
+
+client -> 负载均衡器 ->web server, load balancer支持心跳检查，一旦机器故障，从pool里删掉该机器，从而减少集群的容量，防止client超时无响应
+
+web服务器stateless随时重新启动和停用服务器不会影响client，
+
+停用，web的零停机更新，将一个server从轮换中取出升级，重新放进轮换中；也可以部署到备用stack在load balancer一次性切换所有流量
+
+### db scaling & sharding
+
+单库负载推高--> sharding
